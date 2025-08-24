@@ -1,0 +1,196 @@
+/* pages/settings/settings.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+/* 顶部标题 */
+.header {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  color: white;
+  padding: 60rpx 32rpx 40rpx;
+  text-align: center;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+}
+
+/* 设置区域 */
+.section {
+  margin: 32rpx 32rpx 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+  padding-left: 8rpx;
+}
+
+.setting-group {
+  background-color: white;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 24rpx;
+  border-bottom: 2rpx solid #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item:active {
+  background-color: #f8f9fa;
+}
+
+.setting-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.setting-icon {
+  font-size: 32rpx;
+  width: 48rpx;
+  text-align: center;
+}
+
+.setting-info {
+  flex: 1;
+}
+
+.setting-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.setting-desc {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+}
+
+.setting-arrow {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 16rpx;
+}
+
+.setting-value {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.setting-value text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 开关组件 */
+.setting-switch {
+  transform: scale(0.8);
+}
+
+/* 滑动条 */
+.intensity-slider {
+  width: 200rpx;
+  height: 6rpx;
+}
+
+/* 重置按钮 */
+.reset-section {
+  margin: 32rpx;
+}
+
+.reset-btn {
+  width: 100%;
+  padding: 24rpx;
+  font-size: 28rpx;
+  background-color: #F5222D;
+  color: white;
+  border-radius: 12rpx;
+}
+
+.reset-btn:active {
+  background-color: #CF1322;
+}
+
+/* 底部导航 */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top: 2rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-around;
+  padding: 16rpx 0;
+  padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 24rpx;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-item.active {
+  color: #4A90E2;
+}
+
+.nav-icon {
+  font-size: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.nav-text {
+  font-size: 24rpx;
+}
+
+/* 选择器样式优化 */
+picker {
+  flex: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .setting-item {
+    padding: 24rpx 16rpx;
+  }
+  
+  .setting-info {
+    margin-right: 16rpx;
+  }
+  
+  .intensity-slider {
+    width: 150rpx;
+  }
+}
+
+/* 安全区域适配 */
+.container {
+  padding-bottom: calc(120rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}

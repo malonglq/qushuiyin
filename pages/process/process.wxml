@@ -1,0 +1,176 @@
+<!--pages/process/process.wxml-->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="header">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="nav-title">
+      <text class="title">去水印处理</text>
+      <text class="subtitle" wx:if="{{progress > 0}}">{{progress}}%</text>
+    </view>
+  </view>
+
+  <!-- 图片预览区域 -->
+  <view class="preview-section">
+    <view class="preview-container">
+      <image 
+        class="preview-image" 
+        src="{{imageInfo.tempFilePath}}" 
+        mode="aspectFit"
+        wx:if="{{imageInfo.tempFilePath}}"
+      />
+      
+      <!-- 处理状态覆盖层 -->
+      <view class="overlay" wx:if="{{processing}}">
+        <view class="overlay-content">
+          <view class="loading-spinner"></view>
+          <text class="loading-text">{{statusText}}</text>
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{progress}}%"></view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 水印检测框 -->
+      <view class="watermark-box" wx:if="{{watermarkDetected && !processing}}" style="{{watermarkBoxStyle}}">
+        <view class="box-border"></view>
+        <view class="box-label">检测到水印</view>
+      </view>
+    </view>
+    
+    <!-- 图片信息 -->
+    <view class="image-info" wx:if="{{imageInfo}}">
+      <view class="info-item">
+        <text class="info-label">文件名:</text>
+        <text class="info-value">{{imageInfo.name}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">文件大小:</text>
+        <text class="info-value">{{formatFileSize(imageInfo.size)}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">文件类型:</text>
+        <text class="info-value">{{imageInfo.fileType}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 处理选项 -->
+  <view class="options-section">
+    <view class="section-title">处理选项</view>
+    
+    <!-- 处理模式 -->
+    <view class="option-group">
+      <view class="option-label">处理模式</view>
+      <view class="option-buttons">
+        <view 
+          class="option-btn {{processMode === 'auto' ? 'active' : ''}}"
+          bindtap="selectProcessMode"
+          data-mode="auto"
+        >
+          <text class="btn-icon">🤖</text>
+          <text class="btn-text">自动识别</text>
+        </view>
+        <view 
+          class="option-btn {{processMode === 'manual' ? 'active' : ''}}"
+          bindtap="selectProcessMode"
+          data-mode="manual"
+        >
+          <text class="btn-icon">✋</text>
+          <text class="btn-text">手动选择</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 处理强度 -->
+    <view class="option-group" wx:if="{{processMode === 'auto'}}">
+      <view class="option-label">处理强度</view>
+      <view class="slider-container">
+        <slider 
+          class="intensity-slider"
+          min="1" 
+          max="10" 
+          value="{{intensity}}"
+          bindchange="onIntensityChange"
+          show-value
+        />
+        <view class="slider-labels">
+          <text>轻柔</text>
+          <text>强力</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 输出质量 -->
+    <view class="option-group">
+      <view class="option-label">输出质量</view>
+      <view class="quality-buttons">
+        <view 
+          class="quality-btn {{quality === 'low' ? 'active' : ''}}"
+          bindtap="selectQuality"
+          data-quality="low"
+        >
+          标准
+        </view>
+        <view 
+          class="quality-btn {{quality === 'medium' ? 'active' : ''}}"
+          bindtap="selectQuality"
+          data-quality="medium"
+        >
+          高清
+        </view>
+        <view 
+          class="quality-btn {{quality === 'high' ? 'active' : ''}}"
+          bindtap="selectQuality"
+          data-quality="high"
+        >
+          超清
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <button 
+      class="btn btn-primary process-btn" 
+      bindtap="startProcessing"
+      disabled="{{processing || !imageInfo}}"
+    >
+      {{processing ? '处理中...' : '开始去水印'}}
+    </button>
+    
+    <view class="secondary-actions">
+      <button 
+        class="btn btn-secondary" 
+        bindtap="cancelProcessing"
+        wx:if="{{processing}}"
+      >
+        取消处理
+      </button>
+      <button 
+        class="btn btn-secondary" 
+        bindtap="resetOptions"
+        wx:if="{{!processing}}"
+      >
+        重置选项
+      </button>
+    </view>
+  </view>
+
+  <!-- 处理日志 -->
+  <view class="log-section" wx:if="{{processLogs.length > 0}}">
+    <view class="section-title">处理日志</view>
+    <scroll-view class="log-container" scroll-y>
+      <view 
+        class="log-item" 
+        wx:for="{{processLogs}}" 
+        wx:key="index"
+      >
+        <text class="log-time">{{item.time}}</text>
+        <text class="log-message {{item.type}}">{{item.message}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

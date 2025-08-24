@@ -1,0 +1,208 @@
+<!--pages/history/history.wxml-->
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-section">
+    <view class="search-bar">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索历史记录..." 
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+      />
+      <text 
+        class="search-clear" 
+        bindtap="clearSearch"
+        wx:if="{{searchKeyword}}"
+      >
+        ✕
+      </text>
+    </view>
+    
+    <view class="filter-tabs">
+      <view 
+        class="filter-tab {{filterType === 'all' ? 'active' : ''}}"
+        bindtap="filterHistory"
+        data-type="all"
+      >
+        全部
+      </view>
+      <view 
+        class="filter-tab {{filterType === 'today' ? 'active' : ''}}"
+        bindtap="filterHistory"
+        data-type="today"
+      >
+        今天
+      </view>
+      <view 
+        class="filter-tab {{filterType === 'week' ? 'active' : ''}}"
+        bindtap="filterHistory"
+        data-type="week"
+      >
+        本周
+      </view>
+      <view 
+        class="filter-tab {{filterType === 'month' ? 'active' : ''}}"
+        bindtap="filterHistory"
+        data-type="month"
+      >
+        本月
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录列表 -->
+  <view class="history-section">
+    <view class="empty-state" wx:if="{{filteredHistory.length === 0}}">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无历史记录</text>
+      <text class="empty-desc">开始处理图片后，记录将显示在这里</text>
+      <button 
+        class="btn btn-primary empty-btn" 
+        bindtap="goToHome"
+      >
+        去处理图片
+      </button>
+    </view>
+    
+    <scroll-view 
+      class="history-list" 
+      scroll-y 
+      wx:else
+    >
+      <!-- 按日期分组 -->
+      <view class="date-group" wx:for="{{groupedHistory}}" wx:key="date">
+        <view class="date-header">
+          <text class="date-text">{{item.date}}</text>
+          <text class="date-count">{{item.items.length}}张</text>
+        </view>
+        
+        <view class="history-items">
+          <view 
+            class="history-item" 
+            wx:for="{{item.items}}" 
+            wx:key="id" 
+            wx:for-item="historyItem"
+            bindtap="viewHistoryItem"
+            data-id="{{historyItem.id}}"
+          >
+            <view class="item-image">
+              <image 
+                class="image-thumbnail" 
+                src="{{historyItem.thumbnail || historyItem.processedPath || historyItem.originalPath}}" 
+                mode="aspectFill"
+              />
+              <view class="image-status">
+                <text class="status-icon {{historyItem.saved ? 'saved' : 'processed'}}">
+                  {{historyItem.saved ? '💾' : '✓'}}
+                </text>
+              </view>
+            </view>
+            
+            <view class="item-info">
+              <view class="item-header">
+                <text class="item-name">{{historyItem.name}}</text>
+                <text class="item-time">{{formatTime(historyItem.timestamp)}}</text>
+              </view>
+              
+              <view class="item-details">
+                <view class="detail-item">
+                  <text class="detail-label">质量:</text>
+                  <text class="detail-value">{{getQualityText(historyItem.quality)}}</text>
+                </view>
+                <view class="detail-item">
+                  <text class="detail-label">模式:</text>
+                  <text class="detail-value">{{historyItem.processMode === 'auto' ? '自动' : '手动'}}</text>
+                </view>
+                <view class="detail-item">
+                  <text class="detail-label">大小:</text>
+                  <text class="detail-value">{{formatFileSize(historyItem.size)}}</text>
+                </view>
+              </view>
+              
+              <view class="item-actions">
+                <button 
+                  class="action-btn" 
+                  bindtap="saveImage"
+                  data-id="{{historyItem.id}}"
+                  data-event="save"
+                  catchtap="true"
+                  wx:if="{{!historyItem.saved}}"
+                >
+                  💾 保存
+                </button>
+                <button 
+                  class="action-btn" 
+                  bindtap="shareImage"
+                  data-id="{{historyItem.id}}"
+                  data-event="share"
+                  catchtap="true"
+                >
+                  📤 分享
+                </button>
+                <button 
+                  class="action-btn" 
+                  bindtap="deleteImage"
+                  data-id="{{historyItem.id}}"
+                  data-event="delete"
+                  catchtap="true"
+                >
+                  🗑️ 删除
+                </button>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section" wx:if="{{filteredHistory.length > 0}}">
+    <view class="stats-container">
+      <view class="stats-item">
+        <text class="stats-number">{{stats.total}}</text>
+        <text class="stats-label">总处理</text>
+      </view>
+      <view class="stats-item">
+        <text class="stats-number">{{stats.saved}}</text>
+        <text class="stats-label">已保存</text>
+      </view>
+      <view class="stats-item">
+        <text class="stats-number">{{stats.today}}</text>
+        <text class="stats-label">今日</text>
+      </view>
+      <view class="stats-item">
+        <text class="stats-number">{{stats.thisWeek}}</text>
+        <text class="stats-label">本周</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 清空按钮 -->
+  <view class="clear-section" wx:if="{{filteredHistory.length > 0}}">
+    <button 
+      class="btn btn-danger clear-btn" 
+      bindtap="clearAllHistory"
+    >
+      清空所有记录
+    </button>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item" bindtap="goToHome">
+      <text class="nav-icon">🏠</text>
+      <text class="nav-text">首页</text>
+    </view>
+    <view class="nav-item active">
+      <text class="nav-icon">📋</text>
+      <text class="nav-text">历史</text>
+    </view>
+    <view class="nav-item" bindtap="goToSettings">
+      <text class="nav-icon">⚙️</text>
+      <text class="nav-text">设置</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,182 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 顶部标题 -->
+  <view class="header">
+    <view class="header-title">
+      <text class="title">智能去水印助手</text>
+      <text class="subtitle">AI智能去水印，一键还原高清图片</text>
+    </view>
+  </view>
+
+  <!-- 输入方式切换 -->
+  <view class="mode-switcher">
+    <view class="mode-tabs">
+      <view 
+        class="mode-tab {{currentMode === 'traditional' ? 'active' : ''}}" 
+        bindtap="switchMode" 
+        data-mode="traditional"
+      >
+        <text class="mode-icon">📷</text>
+        <text class="mode-text">传统方式</text>
+        <text class="mode-desc">相册/拍照</text>
+      </view>
+      <view 
+        class="mode-tab {{currentMode === 'link' ? 'active' : ''}}" 
+        bindtap="switchMode" 
+        data-mode="link"
+      >
+        <text class="mode-icon">🔗</text>
+        <text class="mode-text">链接读取</text>
+        <text class="mode-desc">自动识别</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 传统上传区域 -->
+  <view class="upload-section" wx:if="{{currentMode === 'traditional'}}">
+    <view class="upload-area" bindtap="chooseImage">
+      <view class="upload-icon">+</view>
+      <view class="upload-text">选择图片</view>
+      <view class="upload-desc">
+        <text>支持JPG、PNG格式</text>
+        <text>最大10MB</text>
+      </view>
+    </view>
+    
+    <view class="upload-buttons">
+      <button 
+        class="btn btn-primary" 
+        bindtap="chooseImage"
+        data-type="album"
+      >
+        相册选择
+      </button>
+      <button 
+        class="btn btn-secondary" 
+        bindtap="chooseImage"
+        data-type="camera"
+      >
+        拍照上传
+      </button>
+    </view>
+  </view>
+
+  <!-- 链接读取区域 -->
+  <view class="link-section" wx:if="{{currentMode === 'link'}}">
+    <view class="link-input-area">
+      <view class="link-label">
+        <text class="link-icon">🔗</text>
+        <text class="link-text">粘贴图片链接，自动识别并读取</text>
+      </view>
+      
+      <view class="link-input-wrapper">
+        <input 
+          class="link-input" 
+          placeholder="请输入图片链接，支持小红书、抖音、公众号等"
+          value="{{linkInput}}"
+          bindinput="onLinkInput"
+          bindfocus="onLinkFocus"
+          bindblur="onLinkBlur"
+        />
+        <button 
+          class="btn btn-primary link-paste-btn" 
+          bindtap="pasteLink"
+          wx:if="{{!linkInput}}"
+        >
+          粘贴链接
+        </button>
+      </view>
+      
+      <view class="link-buttons">
+        <button 
+          class="btn btn-primary" 
+          bindtap="processLink"
+          disabled="{{!linkInput || processing}}"
+        >
+          {{processing ? '处理中...' : '自动识别'}}
+        </button>
+        <button 
+          class="btn btn-secondary" 
+          bindtap="clearLink"
+          wx:if="{{linkInput}}"
+        >
+          清空
+        </button>
+      </view>
+    </view>
+    
+    <!-- 支持平台 -->
+    <view class="supported-platforms">
+      <text class="platforms-title">支持平台：</text>
+      <view class="platform-list">
+        <view class="platform-item">
+          <text class="platform-icon">📕</text>
+          <text class="platform-name">小红书</text>
+        </view>
+        <view class="platform-item">
+          <text class="platform-icon">📱</text>
+          <text class="platform-name">抖音</text>
+        </view>
+        <view class="platform-item">
+          <text class="platform-icon">📖</text>
+          <text class="platform-name">公众号</text>
+        </view>
+        <view class="platform-item">
+          <text class="platform-icon">🌐</text>
+          <text class="platform-name">其他</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近处理记录 -->
+  <view class="recent-section">
+    <view class="section-header">
+      <text class="section-title">最近处理</text>
+      <text class="section-more" bindtap="goToHistory" wx:if="{{recentImages.length > 0}}">
+        查看全部
+      </text>
+    </view>
+    
+    <view class="recent-images" wx:if="{{recentImages.length > 0}}">
+      <view 
+        class="recent-item" 
+        wx:for="{{recentImages}}" 
+        wx:key="index"
+        bindtap="viewRecentImage"
+        data-index="{{index}}"
+      >
+        <image 
+          class="recent-image" 
+          src="{{item.thumbnail || item.url}}" 
+          mode="aspectFill"
+        />
+        <view class="recent-info">
+          <text class="recent-name">{{item.name}}</text>
+          <text class="recent-time">{{item.time}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="recent-empty" wx:else>
+      <text class="empty-text">暂无处理记录</text>
+      <text class="empty-desc">上传图片或粘贴链接开始处理</text>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item active">
+      <text class="nav-icon">🏠</text>
+      <text class="nav-text">首页</text>
+    </view>
+    <view class="nav-item" bindtap="goToHistory">
+      <text class="nav-icon">📋</text>
+      <text class="nav-text">历史</text>
+    </view>
+    <view class="nav-item" bindtap="goToSettings">
+      <text class="nav-icon">⚙️</text>
+      <text class="nav-text">设置</text>
+    </view>
+  </view>
+</view>

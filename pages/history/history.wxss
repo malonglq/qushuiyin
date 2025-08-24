@@ -1,0 +1,388 @@
+/* pages/history/history.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+/* 搜索区域 */
+.search-section {
+  background-color: white;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 24rpx;
+  padding: 16rpx 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 16rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  background: none;
+  border: none;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-clear {
+  font-size: 24rpx;
+  color: #999;
+  padding: 8rpx;
+  margin-left: 16rpx;
+  cursor: pointer;
+}
+
+/* 过滤标签 */
+.filter-tabs {
+  display: flex;
+  gap: 16rpx;
+}
+
+.filter-tab {
+  flex: 1;
+  padding: 16rpx 24rpx;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+  background-color: #4A90E2;
+  color: white;
+}
+
+/* 历史记录列表 */
+.history-section {
+  margin: 0 32rpx 32rpx;
+  flex: 1;
+}
+
+.empty-state {
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 120rpx 40rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.empty-desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 32rpx;
+  display: block;
+}
+
+.empty-btn {
+  padding: 24rpx 48rpx;
+  font-size: 28rpx;
+}
+
+.history-list {
+  max-height: 1000rpx;
+}
+
+/* 日期分组 */
+.date-group {
+  margin-bottom: 32rpx;
+}
+
+.date-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+  padding: 0 8rpx;
+}
+
+.date-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.date-count {
+  font-size: 24rpx;
+  color: #666;
+  background-color: #f0f0f0;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+/* 历史记录项 */
+.history-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.history-item {
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  gap: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.history-item:active {
+  transform: scale(0.98);
+}
+
+.item-image {
+  position: relative;
+  width: 120rpx;
+  height: 120rpx;
+  flex-shrink: 0;
+}
+
+.image-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12rpx;
+}
+
+.image-status {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 32rpx;
+  height: 32rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-icon {
+  font-size: 18rpx;
+}
+
+.status-icon.saved {
+  color: #52C41A;
+}
+
+.status-icon.processed {
+  color: #4A90E2;
+}
+
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12rpx;
+}
+
+.item-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+  margin-right: 16rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-time {
+  font-size: 24rpx;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.item-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.detail-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.detail-value {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.item-actions {
+  display: flex;
+  gap: 12rpx;
+}
+
+.action-btn {
+  padding: 8rpx 16rpx;
+  font-size: 22rpx;
+  background-color: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.action-btn:active {
+  background-color: #e9ecef;
+}
+
+/* 统计信息 */
+.stats-section {
+  margin: 32rpx;
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24rpx;
+}
+
+.stats-item {
+  text-align: center;
+}
+
+.stats-number {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.stats-label {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+}
+
+/* 清空按钮 */
+.clear-section {
+  margin: 32rpx;
+}
+
+.clear-btn {
+  width: 100%;
+  padding: 24rpx;
+  font-size: 28rpx;
+  background-color: #F5222D;
+  color: white;
+  border-radius: 12rpx;
+}
+
+.clear-btn:active {
+  background-color: #CF1322;
+}
+
+/* 底部导航 */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top: 2rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-around;
+  padding: 16rpx 0;
+  padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 24rpx;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-item.active {
+  color: #4A90E2;
+}
+
+.nav-icon {
+  font-size: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.nav-text {
+  font-size: 24rpx;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .filter-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .filter-tab {
+    flex: 1;
+    min-width: 120rpx;
+  }
+}
+
+/* 安全区域适配 */
+.container {
+  padding-bottom: calc(120rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}

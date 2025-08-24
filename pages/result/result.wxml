@@ -1,0 +1,160 @@
+<!--pages/result/result.wxml-->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="header">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="nav-title">
+      <text class="title">处理完成</text>
+      <text class="success-icon">✓</text>
+    </view>
+  </view>
+
+  <!-- 图片对比区域 -->
+  <view class="compare-section">
+    <view class="compare-tabs">
+      <view 
+        class="compare-tab {{compareMode === 'before' ? 'active' : ''}}"
+        bindtap="switchCompare"
+        data-mode="before"
+      >
+        原图
+      </view>
+      <view 
+        class="compare-tab {{compareMode === 'after' ? 'active' : ''}}"
+        bindtap="switchCompare"
+        data-mode="after"
+      >
+        处理后
+      </view>
+      <view 
+        class="compare-tab {{compareMode === 'slider' ? 'active' : ''}}"
+        bindtap="switchCompare"
+        data-mode="slider"
+      >
+        对比
+      </view>
+    </view>
+    
+    <view class="compare-container">
+      <!-- 单图显示模式 -->
+      <view class="single-image" wx:if="{{compareMode !== 'slider'}}">
+        <image 
+          class="compare-image" 
+          src="{{compareMode === 'before' ? imageInfo.originalPath : imageInfo.processedPath}}" 
+          mode="aspectFit"
+        />
+      </view>
+      
+      <!-- 滑动对比模式 -->
+      <view class="slider-compare" wx:if="{{compareMode === 'slider'}}">
+        <view class="slider-container" bindtouchmove="onSliderMove">
+          <image 
+            class="slider-image original" 
+            src="{{imageInfo.originalPath}}" 
+            mode="aspectFit"
+          />
+          <view class="slider-mask" style="width: {{sliderPosition}}%">
+            <image 
+              class="slider-image processed" 
+              src="{{imageInfo.processedPath}}" 
+              mode="aspectFit"
+            />
+          </view>
+          <view class="slider-line" style="left: {{sliderPosition}}%">
+            <view class="slider-handle"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 处理信息 -->
+  <view class="info-section">
+    <view class="info-card">
+      <view class="info-header">
+        <text class="info-title">处理信息</text>
+        <text class="info-score">★{{qualityScore}}分</text>
+      </view>
+      
+      <view class="info-content">
+        <view class="info-item">
+          <text class="info-label">处理时间:</text>
+          <text class="info-value">{{processTime}}秒</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">处理模式:</text>
+          <text class="info-value">{{imageInfo.processMode === 'auto' ? '自动识别' : '手动选择'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">输出质量:</text>
+          <text class="info-value">{{getQualityText(imageInfo.quality)}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">处理强度:</text>
+          <text class="info-value">{{imageInfo.intensity}}/10</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section">
+    <button 
+      class="btn btn-primary save-btn" 
+      bindtap="saveImage"
+      disabled="{{saving}}"
+    >
+      {{saving ? '保存中...' : '保存到相册'}}
+    </button>
+    
+    <view class="action-buttons">
+      <button 
+        class="btn btn-secondary" 
+        bindtap="shareImage"
+      >
+        分享给朋友
+      </button>
+      <button 
+        class="btn btn-secondary" 
+        bindtap="reprocessImage"
+      >
+        重新编辑
+      </button>
+    </view>
+    
+    <view class="action-buttons">
+      <button 
+        class="btn btn-secondary" 
+        bindtap="goToHome"
+      >
+        返回首页
+      </button>
+    </view>
+  </view>
+
+  <!-- 相关推荐 -->
+  <view class="recommend-section">
+    <view class="section-title">相关推荐</view>
+    <view class="recommend-list">
+      <view 
+        class="recommend-item" 
+        wx:for="{{recommendImages}}" 
+        wx:key="index"
+        bindtap="processRecommend"
+        data-index="{{index}}"
+      >
+        <image 
+          class="recommend-image" 
+          src="{{item.thumbnail}}" 
+          mode="aspectFill"
+        />
+        <view class="recommend-info">
+          <text class="recommend-name">{{item.name}}</text>
+          <text class="recommend-time">{{item.time}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

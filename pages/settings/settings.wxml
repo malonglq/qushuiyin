@@ -1,0 +1,271 @@
+<!--pages/settings/settings.wxml-->
+<view class="container">
+  <!-- 顶部标题 -->
+  <view class="header">
+    <text class="title">设置</text>
+  </view>
+
+  <!-- 账号设置 -->
+  <view class="section">
+    <view class="section-title">账号设置</view>
+    <view class="setting-group">
+      <view class="setting-item" bindtap="goToProfile">
+        <view class="setting-left">
+          <text class="setting-icon">👤</text>
+          <view class="setting-info">
+            <text class="setting-name">用户信息</text>
+            <text class="setting-desc">管理个人资料和账号</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+      
+      <view class="setting-item" bindtap="goToMembership">
+        <view class="setting-left">
+          <text class="setting-icon">⭐</text>
+          <view class="setting-info">
+            <text class="setting-name">会员状态</text>
+            <text class="setting-desc">{{userInfo.membership === 'vip' ? 'VIP会员' : '普通用户'}}</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 处理设置 -->
+  <view class="section">
+    <view class="section-title">处理设置</view>
+    <view class="setting-group">
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-icon">🎯</text>
+          <view class="setting-info">
+            <text class="setting-name">默认处理模式</text>
+            <text class="setting-desc">选择默认的处理方式</text>
+          </view>
+        </view>
+        <picker 
+          bindchange="onProcessModeChange" 
+          value="{{processModeIndex}}" 
+          range="{{processModeOptions}}"
+        >
+          <view class="setting-value">
+            <text>{{processModeOptions[processModeIndex]}}</text>
+            <text class="setting-arrow">></text>
+          </view>
+        </picker>
+      </view>
+      
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-icon">📊</text>
+          <view class="setting-info">
+            <text class="setting-name">输出质量</text>
+            <text class="setting-desc">选择图片输出质量</text>
+          </view>
+        </view>
+        <picker 
+          bindchange="onQualityChange" 
+          value="{{qualityIndex}}" 
+          range="{{qualityOptions}}"
+        >
+          <view class="setting-value">
+            <text>{{qualityOptions[qualityIndex]}}</text>
+            <text class="setting-arrow">></text>
+          </view>
+        </picker>
+      </view>
+      
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-icon">⚡</text>
+          <view class="setting-info">
+            <text class="setting-name">默认处理强度</text>
+            <text class="setting-desc">调整去水印强度</text>
+          </view>
+        </view>
+        <view class="setting-value">
+          <slider 
+            class="intensity-slider" 
+            min="1" 
+            max="10" 
+            value="{{settings.intensity}}"
+            bindchange="onIntensityChange"
+            show-value
+          />
+        </view>
+      </view>
+      
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-icon">🔄</text>
+          <view class="setting-info">
+            <text class="setting-name">批量处理</text>
+            <text class="setting-desc">启用批量处理功能</text>
+          </view>
+        </view>
+        <switch 
+          class="setting-switch" 
+          checked="{{settings.batchProcessing}}" 
+          bindchange="onBatchProcessingChange"
+        />
+      </view>
+      
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-icon">💾</text>
+          <view class="setting-info">
+            <text class="setting-name">自动保存</text>
+            <text class="setting-desc">处理后自动保存到相册</text>
+          </view>
+        </view>
+        <switch 
+          class="setting-switch" 
+          checked="{{settings.autoSave}}" 
+          bindchange="onAutoSaveChange"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 存储管理 -->
+  <view class="section">
+    <view class="section-title">存储管理</view>
+    <view class="setting-group">
+      <view class="setting-item" bindtap="clearCache">
+        <view class="setting-left">
+          <text class="setting-icon">🗑️</text>
+          <view class="setting-info">
+            <text class="setting-name">清理缓存</text>
+            <text class="setting-desc">当前缓存: {{cacheSize}}</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+      
+      <view class="setting-item" bindtap="manageHistory">
+        <view class="setting-left">
+          <text class="setting-icon">📋</text>
+          <view class="setting-info">
+            <text class="setting-name">历史记录管理</text>
+            <text class="setting-desc">管理处理历史记录</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通知设置 -->
+  <view class="section">
+    <view class="section-title">通知设置</view>
+    <view class="setting-group">
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-icon">🔔</text>
+          <view class="setting-info">
+            <text class="setting-name">处理完成通知</text>
+            <text class="setting-desc">处理完成后通知</text>
+          </view>
+        </view>
+        <switch 
+          class="setting-switch" 
+          checked="{{settings.processNotification}}" 
+          bindchange="onProcessNotificationChange"
+        />
+      </view>
+      
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-icon">📱</text>
+          <view class="setting-info">
+            <text class="setting-name">更新通知</text>
+            <text class="setting-desc">应用更新通知</text>
+          </view>
+        </view>
+        <switch 
+          class="setting-switch" 
+          checked="{{settings.updateNotification}}" 
+          bindchange="onUpdateNotificationChange"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他 -->
+  <view class="section">
+    <view class="section-title">其他</view>
+    <view class="setting-group">
+      <view class="setting-item" bindtap="goToAbout">
+        <view class="setting-left">
+          <text class="setting-icon">ℹ️</text>
+          <view class="setting-info">
+            <text class="setting-name">关于我们</text>
+            <text class="setting-desc">版本 {{appVersion}}</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+      
+      <view class="setting-item" bindtap="goToPrivacy">
+        <view class="setting-left">
+          <text class="setting-icon">🔒</text>
+          <view class="setting-info">
+            <text class="setting-name">隐私政策</text>
+            <text class="setting-desc">查看隐私政策</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+      
+      <view class="setting-item" bindtap="goToFeedback">
+        <view class="setting-left">
+          <text class="setting-icon">💬</text>
+          <view class="setting-info">
+            <text class="setting-name">用户反馈</text>
+            <text class="setting-desc">意见建议反馈</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+      
+      <view class="setting-item" bindtap="shareApp">
+        <view class="setting-left">
+          <text class="setting-icon">📤</text>
+          <view class="setting-info">
+            <text class="setting-name">分享应用</text>
+            <text class="setting-desc">分享给朋友使用</text>
+          </view>
+        </view>
+        <text class="setting-arrow">></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 重置按钮 -->
+  <view class="reset-section">
+    <button 
+      class="btn btn-danger reset-btn" 
+      bindtap="resetSettings"
+    >
+      恢复默认设置
+    </button>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item" bindtap="goToHome">
+      <text class="nav-icon">🏠</text>
+      <text class="nav-text">首页</text>
+    </view>
+    <view class="nav-item" bindtap="goToHistory">
+      <text class="nav-icon">📋</text>
+      <text class="nav-text">历史</text>
+    </view>
+    <view class="nav-item active">
+      <text class="nav-icon">⚙️</text>
+      <text class="nav-text">设置</text>
+    </view>
+  </view>
+</view>
